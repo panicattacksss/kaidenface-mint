@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mint KaidenFace NFT</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.4.0/ethers.umd.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #mintButton { padding: 10px 20px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <h1>Mint KaidenFace NFT</h1>
+    <button id="mintButton">Mint NFT</button>
+
+    <script>
+        const contractAddress = "0x1d7Cd8A8831e45bBD1c0666a093f24f37D04e7C5"; // Замените на адрес вашего контракта
+        const iliadNetwork = {
+            chainId: '0x5E9', // 1513 in hex
+            chainName: 'iliad',
+            rpcUrls: ['https://testnet.storyrpc.io/'],
+            nativeCurrency: {
+                name: 'IP',
+                symbol: 'IP',
+                decimals: 18
+            },
+            blockExplorerUrls: ['https://testnet.storyrpc.io/']
+        };
+
+        async function getABI() {
+            const response = await fetch('abi.json');
+            return await response.json();
+        }
+
+        async function checkNetwork() {
+            if (typeof window.ethereum !== 'undefined') {
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const { chainId } = await provider.getNetwork();
+
+                if (chainId !== parseInt(iliadNetwork.chainId, 16)) {
+                    await switchNetwork();
+                }
+            } else {
+                alert('Please install MetaMask!');
+            }
+        }
+
+        async function switchNetwork() {
+            try {
+                await window.ethereum.request({
+                    method: 'wallet_addEthereumChain',
+                    params: [iliadNetwork],
+                });
+            } catch (error) {
+                console.error(error);
+                alert('Error adding network: ' + error.message);
+            }
+        }
+
+        async function mintNFT() {
+            await checkNetwork();
+
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+            const abi = await getABI();
+            const contract = new ethers.Contract(contractAddress, abi, signer);
+
+            try {
+                const tx = await contract.mint(await signer.getAddress());
+                await tx.wait();
+                alert('NFT minted successfully!');
+            } catch (err) {
+                console.error(err);
+                alert('Error minting NFT: ' + err.message);
+            }
+        }
+
+        document.getElementById('mintButton').addEventListener('click', mintNFT);
+    </script>
+</body>
+</html>
