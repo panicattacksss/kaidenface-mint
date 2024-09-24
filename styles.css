@@ -1,0 +1,31 @@
+body {
+    font-family: Arial, sans-serif;
+    background: url('bg.png') no-repeat center center fixed; /* Фоновое изображение */
+    background-size: cover; /* Обеспечивает покрытие всего экрана */
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+#mintButton {
+    width: 100px;         /* Set width to make it circular */
+    height: 100px;        /* Set height equal to width */
+    font-size: 18px;      /* Adjust font size */
+    color: #fff;          /* White text */
+    background-color: black;  /* Button background color */
+    border: 2px solid black;  /* Black border around the button */
+    border-radius: 50%;   /* Make the button fully round */
+    cursor: pointer;      /* Pointer cursor on hover */
+    display: flex;        /* Use flexbox to center text */
+    justify-content: center; /* Center text horizontally */
+    align-items: center;  /* Center text vertically */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#mintButton:hover {
+    background-color: #2b2b25; /* Darken background on hover */
+    transform: scale(1.1);     /* Slightly enlarge button on hover */
+}

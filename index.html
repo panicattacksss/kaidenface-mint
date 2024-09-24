@@ -4,15 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mint KaidenFace NFT</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Подключение CSS файла -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.4.0/ethers.umd.min.js"></script>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        #mintButton { padding: 10px 20px; font-size: 16px; }
-    </style>
 </head>
 <body>
-    <h1>Mint KaidenFace NFT</h1>
-    <button id="mintButton">Mint NFT</button>
+    <div class="container">
+        <button id="mintButton">Mint KaidenFace</button>
+    </div>
 
     <script>
         const contractAddress = "0x1d7Cd8A8831e45bBD1c0666a093f24f37D04e7C5"; // Замените на адрес вашего контракта
@@ -78,5 +76,39 @@
 
         document.getElementById('mintButton').addEventListener('click', mintNFT);
     </script>
+
+<script>
+    const mintButton = document.getElementById("mintButton");
+    const proximityThreshold = 1000;  // Distance from the cursor at which the button starts to move
+
+    function getDistance(x1, y1, x2, y2) {
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    }
+
+    function moveButtonAway(mouseX, mouseY) {
+        const buttonRect = mintButton.getBoundingClientRect();
+        const buttonCenterX = buttonRect.left + buttonRect.width / 2;
+        const buttonCenterY = buttonRect.top + buttonRect.height / 2;
+
+        const distance = getDistance(mouseX, mouseY, buttonCenterX, buttonCenterY);
+
+        if (distance < proximityThreshold) {
+            const angle = Math.atan2(buttonCenterY - mouseY, buttonCenterX - mouseX);
+            const moveX = Math.cos(angle) * 200;  // Move slightly away (20px)
+            const moveY = Math.sin(angle) * 200;
+
+            mintButton.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        }
+    }
+
+    document.addEventListener('mousemove', (event) => {
+        const mouseX = event.clientX;
+        const mouseY = event.clientY;
+
+        moveButtonAway(mouseX, mouseY);
+    });
+</script>
+
+
 </body>
 </html>
